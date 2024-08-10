@@ -21,6 +21,7 @@
     "vite-node": "^2.0.5"
   },
   "dependencies": {
-    "@inquirer/prompts": "^5.3.8"
+    "@inquirer/prompts": "^5.3.8",
+    "inquirer-interactive-list-prompt": "^1.0.4"
   }
 }
