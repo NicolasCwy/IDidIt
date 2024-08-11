@@ -1,4 +1,4 @@
-type Task = {
+export type Task = {
     id: string
     name: string
 }
@@ -25,6 +25,12 @@ class TaskArray {
 
     getTasks(): Task[] {
         return Object.values(this.tasks)
+    }
+
+    filterTasks(keyword: string): Task[] {
+        return Object.values(this.tasks).filter((task: Task) =>
+            task.name.startsWith(keyword)
+        )
     }
 }
 

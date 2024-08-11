@@ -1,6 +1,8 @@
 import { input } from '@inquirer/prompts'
-import { addTask, taskArray } from './TaskDb'
+import { addTask, Task, taskArray } from './TaskDb'
 import prompt from 'inquirer-interactive-list-prompt'
+import { select } from 'inquirer-select-pro'
+import { addMarkedTask, getTodaysMarkedTasks, markedTaskArray } from './MarkDb'
 
 enum Operation {
     addTask = 'add',
@@ -13,6 +15,15 @@ function getOperation(input: string) {
     }
 
     throw new Error('Invalid Operation')
+}
+
+function getTaskOptions(tasks: Task[]) {
+    return tasks.map((task) => {
+        return {
+            name: task.name,
+            value: task.id,
+        }
+    })
 }
 
 async function start() {
@@ -34,7 +45,16 @@ async function start() {
         }
 
         if (operation === Operation.markTask) {
-            console.log('marking task')
+            const taskIds = await select({
+                message: 'select',
+                options: async (input) =>
+                    !input
+                        ? getTaskOptions(taskArray.getTasks())
+                        : getTaskOptions(taskArray.filterTasks(input)),
+            })
+            console.log(taskIds)
+            taskIds.forEach((id) => addMarkedTask(id))
+            console.log(getTodaysMarkedTasks())
         }
     }
 }
