@@ -1,11 +1,11 @@
 export type Task = {
-    id: string
+    id: taskId
     name: string
 }
 
-type Id = string
+export type taskId = string
 
-type Tasks = Record<Id, Task>
+type Tasks = Record<taskId, Task>
 
 class TaskArray {
     tasks: Tasks = {}

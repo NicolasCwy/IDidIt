@@ -1,7 +1,8 @@
 import moment, { Moment } from 'moment'
+import { taskId } from '../TaskDb'
 
 type DateStr = string
-type Tasks = Record<DateStr, Set<string>>
+type Tasks = Record<DateStr, Set<taskId>>
 
 function getCurrentDate() {
     return formatMoment(getCurrentMoment())
@@ -44,16 +45,16 @@ class MarkedTasks {
     dateMap: Tasks = {}
     constructor() {}
 
-    addMarkedTask(id: string) {
+    addMarkedTask(id: taskId) {
         const today = getCurrentDate()
         this.dateMap[today] = this.dateMap[today] || new Set()
 
         this.dateMap[today].add(id)
     }
 
-    getMarkedTaskInInterval(startDate: Moment, endDate: Moment): Set<string> {
+    getMarkedTaskInInterval(startDate: Moment, endDate: Moment): Set<taskId> {
         const intervalDates = getDatesBetween(startDate, endDate)
-        const markedTasks: Set<string> = new Set()
+        const markedTasks: Set<taskId> = new Set()
         intervalDates.forEach((date) =>
             this.getMarkedTaskOnDate(date).forEach((task) =>
                 markedTasks.add(task)
@@ -65,7 +66,7 @@ class MarkedTasks {
     getMarkedTaskOnDate(dateMoment: Moment) {
         const date = formatMoment(dateMoment)
         if (!(date in this.dateMap)) {
-            return new Set<string>()
+            return new Set<taskId>()
         }
 
         return this.dateMap[date]
@@ -74,7 +75,7 @@ class MarkedTasks {
 
 export const markedTaskArray = new MarkedTasks()
 
-export function addMarkedTask(id: string) {
+export function addMarkedTask(id: taskId) {
     markedTaskArray.addMarkedTask(id)
 }
 

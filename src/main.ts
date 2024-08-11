@@ -1,5 +1,5 @@
 import { input } from '@inquirer/prompts'
-import { addTask, filterTasks, getTask, getTasks, Task } from './TaskDb'
+import { addTask, filterTasks, getTask, getTasks, Task, taskId } from './TaskDb'
 import prompt from 'inquirer-interactive-list-prompt'
 import { select } from 'inquirer-select-pro'
 import {
@@ -66,7 +66,7 @@ async function start() {
         if (operation === Operation.generateTasksDone) {
             const today = moment()
             const startDate = today.clone().subtract(7, 'days')
-            const taskIds: Set<string> = getMarkedTaskInInterval(
+            const taskIds: Set<taskId> = getMarkedTaskInInterval(
                 startDate,
                 today
             )
