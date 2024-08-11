@@ -1,12 +1,11 @@
 import { input } from '@inquirer/prompts'
-import { addTask, getTask, Task, taskArray } from './TaskDb'
+import { addTask, filterTasks, getTask, getTasks, Task } from './TaskDb'
 import prompt from 'inquirer-interactive-list-prompt'
 import { select } from 'inquirer-select-pro'
 import {
     addMarkedTask,
     getMarkedTaskInInterval,
     getTodaysMarkedTasks,
-    markedTaskArray,
 } from './MarkDb'
 import moment from 'moment'
 
@@ -49,7 +48,7 @@ async function start() {
         if (operation === Operation.addTask) {
             const taskName = await input({ message: 'task name' })
             addTask(taskName)
-            console.log(taskArray.getTasks())
+            console.log(getTasks())
         }
 
         if (operation === Operation.markTask) {
@@ -57,8 +56,8 @@ async function start() {
                 message: 'select',
                 options: async (input) =>
                     !input
-                        ? getTaskOptions(taskArray.getTasks())
-                        : getTaskOptions(taskArray.filterTasks(input)),
+                        ? getTaskOptions(getTasks())
+                        : getTaskOptions(filterTasks(input)),
             })
             taskIds.forEach((id) => addMarkedTask(id))
             console.log(getTodaysMarkedTasks())

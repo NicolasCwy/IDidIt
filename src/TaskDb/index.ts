@@ -51,3 +51,11 @@ export function addTask(name: string) {
 export function getTask(taskId: string) {
     return taskArray.getTask(taskId)
 }
+
+export function getTasks() {
+    return taskArray.getTasks()
+}
+
+export function filterTasks(keyword: string) {
+    return taskArray.filterTasks(keyword)
+}
