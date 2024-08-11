@@ -1,16 +1,23 @@
 import { input } from '@inquirer/prompts'
-import { addTask, Task, taskArray } from './TaskDb'
+import { addTask, getTask, Task, taskArray } from './TaskDb'
 import prompt from 'inquirer-interactive-list-prompt'
 import { select } from 'inquirer-select-pro'
-import { addMarkedTask, getTodaysMarkedTasks, markedTaskArray } from './MarkDb'
+import {
+    addMarkedTask,
+    getMarkedTaskInInterval,
+    getTodaysMarkedTasks,
+    markedTaskArray,
+} from './MarkDb'
+import moment from 'moment'
 
 enum Operation {
     addTask = 'add',
     markTask = 'mark',
+    generateTasksDone = 'generate',
 }
 
 function getOperation(input: string) {
-    if (input === 'add' || input == 'mark') {
+    if (input === 'add' || input === 'mark' || input === 'generate') {
         return input as Operation
     }
 
@@ -33,6 +40,7 @@ async function start() {
             choices: [
                 { name: 'Add Task', value: 'add', key: 'a' },
                 { name: 'Mark task as complete', value: 'mark', key: 'm' },
+                { name: 'Generate tasks done', value: 'generate', key: 'g' },
             ],
         })
 
@@ -52,9 +60,22 @@ async function start() {
                         ? getTaskOptions(taskArray.getTasks())
                         : getTaskOptions(taskArray.filterTasks(input)),
             })
-            console.log(taskIds)
             taskIds.forEach((id) => addMarkedTask(id))
             console.log(getTodaysMarkedTasks())
+        }
+
+        if (operation === Operation.generateTasksDone) {
+            const today = moment()
+            const startDate = today.clone().subtract(7, 'days')
+            const taskIds: Set<string> = getMarkedTaskInInterval(
+                startDate,
+                today
+            )
+            const stringBuilder: string[] = []
+            taskIds.forEach((id) => {
+                stringBuilder.push(getTask(id).name)
+            })
+            console.log(stringBuilder.join('\n'))
         }
     }
 }

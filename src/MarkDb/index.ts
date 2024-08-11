@@ -26,6 +26,20 @@ function getDatesInPrevious(daysSubstract: number): Moment[] {
     return dates
 }
 
+// Inclusive of start and end date
+function getDatesBetween(startDate: Moment, endDate: Moment): Moment[] {
+    const currDate = startDate.startOf('day')
+    endDate = endDate.startOf('day')
+    const dates: Moment[] = []
+
+    while (currDate.diff(endDate) <= 0) {
+        dates.push(currDate.clone())
+        currDate.add(1, 'days')
+    }
+
+    return dates
+}
+
 class MarkedTasks {
     dateMap: Tasks = {}
     constructor() {}
@@ -37,9 +51,8 @@ class MarkedTasks {
         this.dateMap[today].add(id)
     }
 
-    // Todo allow for custom start and end dates
-    getMarkedTaskInInterval(): Set<string> {
-        const intervalDates = getDatesInPrevious(7)
+    getMarkedTaskInInterval(startDate: Moment, endDate: Moment): Set<string> {
+        const intervalDates = getDatesBetween(startDate, endDate)
         const markedTasks: Set<string> = new Set()
         intervalDates.forEach((date) =>
             this.getMarkedTaskOnDate(date).forEach((task) =>
@@ -52,7 +65,7 @@ class MarkedTasks {
     getMarkedTaskOnDate(dateMoment: Moment) {
         const date = formatMoment(dateMoment)
         if (!(date in this.dateMap)) {
-            return []
+            return new Set<string>()
         }
 
         return this.dateMap[date]
@@ -68,4 +81,8 @@ export function addMarkedTask(id: string) {
 export function getTodaysMarkedTasks() {
     const today = moment()
     return markedTaskArray.getMarkedTaskOnDate(today)
+}
+
+export function getMarkedTaskInInterval(startDate: Moment, endDate: Moment) {
+    return markedTaskArray.getMarkedTaskInInterval(startDate, endDate)
 }

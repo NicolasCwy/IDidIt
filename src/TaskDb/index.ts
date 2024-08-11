@@ -27,6 +27,13 @@ class TaskArray {
         return Object.values(this.tasks)
     }
 
+    getTask(id: string): Task {
+        if (!(id in this.tasks)) {
+            throw new Error('Task does not exist')
+        }
+        return this.tasks[id]
+    }
+
     filterTasks(keyword: string): Task[] {
         return Object.values(this.tasks).filter((task: Task) =>
             task.name.startsWith(keyword)
@@ -39,4 +46,8 @@ export const taskArray = new TaskArray()
 export function addTask(name: string) {
     const newTask: Task = taskArray.createTask(name)
     taskArray.addTask(newTask)
+}
+
+export function getTask(taskId: string) {
+    return taskArray.getTask(taskId)
 }
