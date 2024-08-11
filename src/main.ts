@@ -39,7 +39,11 @@ async function start() {
             choices: [
                 { name: 'Add Task', value: 'add', key: 'a' },
                 { name: 'Mark task as complete', value: 'mark', key: 'm' },
-                { name: 'Generate tasks done', value: 'generate', key: 'g' },
+                {
+                    name: 'Generate tasks done',
+                    value: 'generate',
+                    key: 'g',
+                },
             ],
         })
 
@@ -60,7 +64,12 @@ async function start() {
                         : getTaskOptions(filterTasks(input)),
             })
             taskIds.forEach((id) => addMarkedTask(id))
-            console.log(getTodaysMarkedTasks())
+
+            const taskNames = [...getTodaysMarkedTasks()].map(
+                (id) => getTask(id).name
+            )
+
+            console.log(`Marked tasks\n${taskNames.join('\n')}`)
         }
 
         if (operation === Operation.generateTasksDone) {
@@ -76,6 +85,8 @@ async function start() {
             })
             console.log(stringBuilder.join('\n'))
         }
+
+        console.log('\n')
     }
 }
 
