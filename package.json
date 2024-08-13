@@ -24,6 +24,7 @@
     "@inquirer/prompts": "^5.3.8",
     "inquirer-interactive-list-prompt": "^1.0.4",
     "inquirer-select-pro": "1.0.0-alpha.7",
-    "moment": "^2.30.1"
+    "moment": "^2.30.1",
+    "node-json-db": "^2.3.0"
   }
 }

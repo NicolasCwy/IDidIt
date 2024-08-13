@@ -1,12 +1,19 @@
 import { input } from '@inquirer/prompts'
-import { addTask, filterTasks, getTask, getTasks, Task, taskId } from './TaskDb'
+import {
+    taskId,
+    Task,
+    createTask,
+    filterTasks,
+    getTask,
+    getTasks,
+} from './Task'
 import prompt from 'inquirer-interactive-list-prompt'
 import { select } from 'inquirer-select-pro'
 import {
     addMarkedTask,
     getMarkedTaskInInterval,
     getTodaysMarkedTasks,
-} from './MarkDb'
+} from './Mark'
 import moment from 'moment'
 
 enum Operation {
@@ -23,7 +30,12 @@ function getOperation(input: string) {
     throw new Error('Invalid Operation')
 }
 
-function getTaskOptions(tasks: Task[]) {
+type TaskOption = {
+    name: string
+    value: string
+}
+
+function getTaskOptions(tasks: Task[]): TaskOption[] {
     return tasks.map((task) => {
         return {
             name: task.name,
@@ -51,23 +63,34 @@ async function start() {
 
         if (operation === Operation.addTask) {
             const taskName = await input({ message: 'task name' })
-            addTask(taskName)
-            console.log(getTasks())
+            await createTask(taskName)
+            const tasks = await getTasks()
+            console.log(tasks)
         }
 
         if (operation === Operation.markTask) {
             const taskIds = await select({
                 message: 'select',
-                options: async (input) =>
-                    !input
-                        ? getTaskOptions(getTasks())
-                        : getTaskOptions(filterTasks(input)),
+                options: async (input) => {
+                    if (!input) {
+                        const tasks = await getTasks()
+                        return getTaskOptions(tasks)
+                    } else {
+                        const tasks = await filterTasks(input)
+                        console.log(tasks)
+                        return getTaskOptions(tasks)
+                    }
+                },
             })
-            taskIds.forEach((id) => addMarkedTask(id))
+            for (const id of taskIds) {
+                await addMarkedTask(id)
+            }
 
-            const taskNames = [...getTodaysMarkedTasks()].map(
-                (id) => getTask(id).name
-            )
+            const taskNames: string[] = []
+            for (const id of taskIds.values()) {
+                const name = (await getTask(id)).name
+                taskNames.push(name)
+            }
 
             console.log(`Marked tasks\n${taskNames.join('\n')}`)
         }
@@ -75,14 +98,14 @@ async function start() {
         if (operation === Operation.generateTasksDone) {
             const today = moment()
             const startDate = today.clone().subtract(7, 'days')
-            const taskIds: Set<taskId> = getMarkedTaskInInterval(
+            const taskIds: Set<taskId> = await getMarkedTaskInInterval(
                 startDate,
                 today
             )
             const stringBuilder: string[] = []
-            taskIds.forEach((id) => {
-                stringBuilder.push(getTask(id).name)
-            })
+            for (const id of taskIds) {
+                stringBuilder.push((await getTask(id)).name)
+            }
             console.log(stringBuilder.join('\n'))
         }
 
