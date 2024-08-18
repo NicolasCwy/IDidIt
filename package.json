@@ -1,13 +1,21 @@
 {
   "name": "ididit",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "author": "Nicolas Chang",
+  "license": "ISC",
+  "description": "Weekly task tracker",
   "type": "module",
   "scripts": {
     "dev": "vite-node src/main.ts",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc",
+    "prepare": "npm run build"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NicolasCwy/IDidIt.git"
+  },
+  "bin": "./dist/main.js",
+  "keywords": ["task tracker", "task", "cli"],
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "eslint": "9.x",

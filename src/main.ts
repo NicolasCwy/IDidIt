@@ -1,16 +1,17 @@
+#!/usr/bin/env node
 import { input } from '@inquirer/prompts'
-import {
-    taskId,
-    Task,
-    createTask,
-    filterTasks,
-    getTask,
-    getTasks,
-} from './Task'
 import prompt from 'inquirer-interactive-list-prompt'
 import { select } from 'inquirer-select-pro'
-import { addMarkedTask, getMarkedTaskInInterval } from './Mark'
 import moment from 'moment'
+import { addMarkedTask, getMarkedTaskInInterval } from './Mark/index.js'
+import {
+    type Task,
+    createTask,
+    getTasks,
+    filterTasks,
+    getTask,
+    type taskId,
+} from './Task/index.js'
 
 enum Operation {
     addTask = 'add',

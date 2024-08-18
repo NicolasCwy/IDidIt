@@ -1,4 +1,4 @@
-import { taskDb } from './taskDb'
+import { taskDb } from './taskDb.js'
 
 export type Task = {
     id: taskId

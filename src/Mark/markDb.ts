@@ -1,5 +1,5 @@
-import { db } from '../Db'
-import { taskId } from '../Task'
+import { db } from '../Db/index.js'
+import type { taskId } from '../Task/index.js'
 
 const markTaskPrefix = '/markedTasks'
 
