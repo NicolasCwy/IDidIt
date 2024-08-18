@@ -9,11 +9,7 @@ import {
 } from './Task'
 import prompt from 'inquirer-interactive-list-prompt'
 import { select } from 'inquirer-select-pro'
-import {
-    addMarkedTask,
-    getMarkedTaskInInterval,
-    getTodaysMarkedTasks,
-} from './Mark'
+import { addMarkedTask, getMarkedTaskInInterval } from './Mark'
 import moment from 'moment'
 
 enum Operation {

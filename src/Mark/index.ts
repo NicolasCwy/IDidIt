@@ -16,6 +16,7 @@ function formatMoment(m: Moment) {
     return m.format('DD-MM-YYYY')
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getDatesInPrevious(daysSubstract: number): Moment[] {
     const dates: Moment[] = []
     let newMoment
