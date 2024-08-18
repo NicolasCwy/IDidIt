@@ -5,6 +5,8 @@
   "license": "ISC",
   "description": "Weekly task tracker",
   "type": "module",
+  "main": "dist/main.js",
+  "files": ["./dist"],
   "scripts": {
     "dev": "vite-node src/main.ts",
     "build": "tsc",
@@ -12,10 +14,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NicolasCwy/IDidIt.git"
+    "url": "git+https://github.com/NicolasCwy/IDidIt.git"
   },
-  "bin": "./dist/main.js",
-  "keywords": ["task tracker", "task", "cli"],
+  "bin": {
+    "ididit": "dist/main.js"
+  },
+  "keywords": [
+    "task tracker",
+    "task",
+    "cli"
+  ],
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "eslint": "9.x",
